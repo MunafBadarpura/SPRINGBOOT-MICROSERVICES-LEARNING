@@ -1,2 +1,13 @@
-server :
-  port :
+eureka:
+  instance:
+    hostname : localhost
+    prefer-ip-address: true #
+  server: #
+      enable-self-preservation: false #
+
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+server:
+  port: 8761

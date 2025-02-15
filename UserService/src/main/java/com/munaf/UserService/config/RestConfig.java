@@ -16,17 +16,19 @@ public class RestConfig {
     public RestClient ratingRestClient() {
         return RestClient
                 .builder()
+//                .baseUrl("http://RATING-SERVICE")
                 .baseUrl("http://localhost:8083")
                 .build();
     }
 
 
-    @Bean
+    @Bean // 8082
     @Qualifier("hotelRestClient")
     @LoadBalanced
     public RestClient hotelRestClient() {
         return RestClient
                 .builder()
+//                .baseUrl("http://HOTEL-SERVICE")
                 .baseUrl("http://localhost:8082")
                 .build();
     }

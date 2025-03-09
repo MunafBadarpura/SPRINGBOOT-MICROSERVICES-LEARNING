@@ -26,13 +26,13 @@ public class UserServiceIMPL implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Autowired
-//    @Qualifier("ratingRestClient")
-//    private RestClient ratingRestClient;
+    @Autowired
+    @Qualifier("ratingRestClient")
+    private RestClient ratingRestClient;
 
-//    @Autowired
-//    @Qualifier("hotelRestClient")
-//    private RestClient hotelRestClient;
+    @Autowired
+    @Qualifier("hotelRestClient")
+    private RestClient hotelRestClient;
 
     @Autowired
     private HotelFeignClient hotelFeignClient;
@@ -46,6 +46,8 @@ public class UserServiceIMPL implements UserService {
 //                .body(RatingResponse.class);
 //
 //        return ratingResponses.getData();
+
+        // USING FEIGN CLIENT
         RatingResponse ratingResponse = ratingFeignClient.getRatingByUserId(userId);
         return ratingResponse.getData();
     }
@@ -57,6 +59,8 @@ public class UserServiceIMPL implements UserService {
 //                .body(HotelResponse.class);
 //
 //        return hotelResponse.getData();
+
+        // USING FEIGN CLIENT
         HotelResponse hotelResponse = hotelFeignClient.getHotelById(hotelId);
         return hotelResponse.getData();
     }
@@ -93,6 +97,7 @@ public class UserServiceIMPL implements UserService {
         users.forEach(user -> {
             user.getRatings().forEach(rating -> rating.setHotel(getHotelByHotelId(rating.getHotelId())));
         });
+
 
         return users;
     }

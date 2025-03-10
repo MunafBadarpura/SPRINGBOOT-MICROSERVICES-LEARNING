@@ -19,6 +19,35 @@ spring:
     import: "optional:configserver:http://localhost:8085"
 
 
+# ACTUATOR CONFIGURATIONS
+management:
+  health:
+    circuitbreakers:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+# RESILIENCE4j CONFIGURATIONS
+resilience4j:
+  circuitbreaker:
+    instances:
+      ratingHotelBreaker:
+        registerHealthIndicator: true # enables health monitoring for circuit breaker(http://localhost:8081/actuator/health)
+        eventConsumerBufferSize: 10 # keep track of last 10 events (success/failure) for this circuit breaker.
+        failureRateThreshold: 50 # It sets the 50% failure rate threshold for the circuit breaker.
+        minimumNumberOfCalls: 5 # The circuit breaker will not activate until at least 5 requests are made.
+        automaticTransitionFromOpenToHalfOpenEnabled: true # After the circuit is OPEN (failed), it will automatically try again after a delay.
+        waitDurationInOpenState: 6s # After 6 seconds, it will allow limited calls to check if the service is up.
+        permittedNumberOfCallsInHalfOpenState: 3 # When the circuit moves to HALF-OPEN, it allows only 3 calls to test.
+        slidingWindowSize: 10 # The circuit breaker will calculate the failure rate based on the last 10 requests.
+        slidingWindowType: COUNT_BASED # COUNT_BASED means it will count the last 10 requests and calculate failure.
+
 #EUREKA CLIENT CONFIG : COMMENTED BECAUSE IMPORTED THROUGH CONFIG-SERVER
 
 #eureka:

@@ -3,6 +3,7 @@ package com.munaf.UserService.controllers;
 import com.munaf.UserService.entities.User;
 import com.munaf.UserService.services.UserService;
 import com.munaf.UserService.utils.ResponseModel;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,20 @@ public class UserController {
         return new ResponseEntity<>(responseModel, HttpStatus.OK);
     }
 
+    // FALLBACK METHOD FOR : getUserById
+    public ResponseEntity<ResponseModel> ratingHotelFallback(Long userId, Exception ex) {
+        ResponseModel responseModel = ResponseModel
+                .builder()
+                .data("FALLBACK GENERATED ON RATING-HOTEL-SERVICE")
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.toString())
+                .build();
+
+        return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @GetMapping("/{userId}")
+    @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<ResponseModel> getUserById(@PathVariable Long userId) {
         ResponseModel responseModel = ResponseModel
                 .builder()

@@ -48,8 +48,14 @@ resilience4j:
         slidingWindowSize: 10 # The circuit breaker will calculate the failure rate based on the last 10 requests.
         slidingWindowType: COUNT_BASED # COUNT_BASED means it will count the last 10 requests and calculate failure.
 
-#EUREKA CLIENT CONFIG : COMMENTED BECAUSE IMPORTED THROUGH CONFIG-SERVER
+  ratelimiter:
+    instances:
+      ratingHotelLimiterFallback:
+        limit-refresh-period: 5s # limit refresh after 5 seconds
+        limit-for-period: 3 # 3 requests allowed in each second
+        timeout-duration: 0s # how long the system should wait before processing the request if the rate limit is exceeded.
 
+#EUREKA CLIENT CONFIG : COMMENTED BECAUSE IMPORTED THROUGH CONFIG-SERVER
 #eureka:
 #  instance:
 #    hostname: localhost
